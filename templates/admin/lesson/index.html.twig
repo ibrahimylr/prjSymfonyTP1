@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Leçon{% endblock %}
+
+{% block body %}
+    <a href="{{ path('lesson_add') }}" type="button" class="btn btn-success">Ajouter une leçon</a>
+    <table class="table table-striped table-bordered table-hover text-center mt-2">
+        <caption>Mes leçons</caption>
+        <thead>
+        <tr>
+            <th scope="col">Titre</th>
+            <th scope="col">Professeur</th>
+            <th scope="col">Début</th>
+            <th scope="col">Fin</th>
+            <th scope="col" data-toggle="tooltip" data-placement="top" title="Nombre de commentaire">Nb. Commentaire</th>
+            <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for lesson in lessons %}
+                <tr onclick="window.location='{{ path('comment', {'slugLesson':lesson.slug}) }}'">
+                    <td>{{ lesson.title }}</td>
+                    <td>{{ lesson.teacher }}</td>
+                    <td>{{ lesson.startAt | date('d/m/Y') }}</td>
+                    <td>{{ lesson.endAt | date('d/m/Y') }}</td>
+                    <td>{{ lesson.comments|length }}</td>
+                    <td>
+                        <a href="{{ path('lesson_edit', {'slug': lesson.slug}) }}" type="button" class="btn btn-sm btn-warning">Editer</a>
+                        <a href="{{ path('lesson_delete', {'slug': lesson.slug}) }}" type="button" class="btn btn-sm btn-danger">Supprimer</a>
+                        <a href="{{ path('comment_add', {'slugLesson': lesson.slug}) }}" type="button" class="btn btn-sm btn-secondary">Ajouter un commentaire</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6">Aucune donnée disponible</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ path('index') }}" type="button" class="btn btn-secondary">Revenir à l'accueil</a>
+{% endblock %}

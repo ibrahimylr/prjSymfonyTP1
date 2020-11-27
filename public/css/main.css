@@ -1,0 +1,26 @@
+caption
+{
+    caption-side: top;
+}
+
+.table-hover
+{
+    cursor: pointer;
+}
+
+.index_card_span
+{
+    font-size: 13px;
+    color: gray;
+    font-weight: bold;
+}
+
+.f14
+{
+    font-size: 14px;
+}
+
+.avatarImg
+{
+    max-height: 60px
+}

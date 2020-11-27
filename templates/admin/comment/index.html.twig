@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ lesson.title }} - Commentaire{% endblock %}
+
+{% block body %}
+    <div class="d-flex justify-content-between mb-3">
+        <a href="{{ path('lesson') }}" class="btn btn-warning">Retour</a>
+        <a href="{{ path('comment_add', {'slugLesson':lesson.slug}) }}" class="btn btn-success">Nouveau commentaire</a>
+    </div>
+
+    <div>
+        <h4>Commentaires non validés</h4>
+        <div class="list-group">
+            {% for comment in comments %}
+                {% if comment.state != "published" %}
+                    <div class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="{{ vich_uploader_asset(comment, 'imageFile') }}" alt="{{ comment.author }}" class="img-thumbnail mr-2 avatarImg"  />
+                                <h5 class="mb-1">{{ comment.author }}</h5>
+                            </div>
+                            <small>{{ comment.createdAt | ago('now') | capitalize }}</small>
+                        </div>
+                        <p class="mb-1">{{ comment.content }}</p>
+                        <div class="d-flex justify-content-between">
+                            <small>{{ comment.email }}</small>
+                            <div>
+                                {% if workflow_can(comment, 'publish') %}
+                                    <button onclick="window.location='{{ path('comment_changeState', {'id': comment.id, 'transition': 'publish'}) }}'" class="btn btn-success">Valider</button>
+                                {% else %}
+                                    <button onclick="window.location='{{ path('comment_changeState', {'id': comment.id, 'transition': 'publish'}) }}'" class="btn btn-success" disabled>Valider</button>
+                                {% endif %}
+
+                                {% if workflow_can(comment, 'reject') %}
+                                    <button onclick="window.location='{{ path('comment_changeState', {'id': comment.id, 'transition': 'reject'}) }}'" class="btn btn-danger">Rejeter</button>
+                                {% else %}
+                                    <button onclick="window.location='{{ path('comment_changeState', {'id': comment.id, 'transition': 'reject'}) }}'" class="btn btn-danger" disabled>Rejeter</button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="mt-5">
+        <h4>Commentaires publiés</h4>
+        <div class="list-group">
+            {% for comment in comments %}
+                {% if comment.state == "published" %}
+                    <div class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="{{ vich_uploader_asset(comment, 'imageFile') }}" alt="{{ comment.author }}" class="img-thumbnail mr-2 avatarImg"  />
+                                <h5 class="mb-1">{{ comment.author }}</h5>
+                            </div>
+                            <small>{{ comment.createdAt | ago('now') | capitalize }}</small>
+                        </div>
+                        <p class="mb-1">{{ comment.content }}</p>
+                        <div class="d-flex justify-content-between">
+                            <small>{{ comment.email }}</small>
+                            <div>
+                                {% if workflow_can(comment, 'moderate') %}
+                                    <button onclick="window.location='{{ path('comment_changeState', {'id': comment.id, 'transition': 'moderate'}) }}'" class="btn btn-warning">Désoumettre</button>
+                                {% else %}
+                                    <button onclick="window.location='{{ path('comment_changeState', {'id': comment.id, 'transition': 'moderate'}) }}'" class="btn btn-warning" disabled>Désoumettre</button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}

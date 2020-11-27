@@ -1,0 +1,28 @@
+{% extends 'index/header.html.twig' %}
+
+{% block title %}Leçon{% endblock %}
+
+{% block body %}
+    <div class="row row-cols-1 row-cols-md-3">
+        {% for lesson in lessons %}
+            <div class="col mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ lesson.title }}</h5>
+                        <p class="card-text">Leçon crée par <b>{{ lesson.teacher }}</b></p>
+                        <div>
+                            <span class="index_card_span">Début : </span>
+                            <span class="f14">{{ lesson.startAt | date('d/m/Y') }}</span>
+                        </div>
+
+                        <div>
+                            <span class="index_card_span">Fin : </span>
+                            <span class="f14">{{ lesson.endAt | date('d/m/Y') }}</span>
+                        </div>
+                        <a href="{{ path('index_comment', {'slugLesson':lesson.slug}) }}" class="btn btn-info mt-3">Voir le cours</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends 'index/header.html.twig' %}
+
+{% block title %}Commentaire{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <div class="card-header d-flex justify-content-between">
+            <span>{{ lesson.title }}</span>
+            <span>Du <b>{{ lesson.startAt | date('d/m/Y') }}</b> au <b>{{ lesson.endAt | date('d/m/Y') }}</b></span>
+        </div>
+        <div class="card-body">
+            <div class="list-group">
+                {% for comment in comments %}
+                    <div class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="{{ vich_uploader_asset(comment, 'imageFile') }}" alt="{{ comment.author }}" class="img-thumbnail mr-2 avatarImg"  />
+                                <h5 class="mb-1">{{ comment.author }}</h5>
+                            </div>
+                            <small>{{ comment.createdAt | ago('now') | capitalize }}</small>
+                        </div>
+                        <p class="mb-1">{{ comment.content }}</p>
+                        <small>{{ comment.email }}</small>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="d-flex justify-content-center mt-4">
+                {{ knp_pagination_render(pagination) }}
+            </div>
+
+            <blockquote class="blockquote mb-0">
+                <footer class="blockquote-footer mt-3">Cours écrit par <cite title="Professeur">{{ lesson.teacher }}</cite></footer>
+            </blockquote>
+        </div>
+    </div>
+
+    <div class="p-5 mt-5">
+        {{ form_start(form) }}
+            <div class="form-row">
+                <div class="col">
+                    {{ form_row(form.imageFile, { 'label': 'Avatar' }) }}
+                </div>
+                <div class="col">
+                    {{ form_row(form.author, { 'label': 'Auteur' }) }}
+                </div>
+                <div class="col">
+                    {{ form_row(form.email, { 'label': 'Email' }) }}
+                </div>
+            </div>
+            <div class="form-group">
+                {{ form_row(form.content, { 'label': 'Contenu' }) }}
+            </div>
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-success">Confirmer</button>
+            </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
